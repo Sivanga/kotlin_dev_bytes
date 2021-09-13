@@ -18,7 +18,9 @@
 package com.example.android.devbyteviewer
 
 import android.app.Application
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.android.devbyteviewer.work.RefreshDataWork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +54,8 @@ class DevByteApplication : Application() {
     private fun setupRecurringWork() {
         var repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWork>(1, TimeUnit.DAYS)
             .build()
+        WorkManager.getInstance(this).
+        enqueueUniquePeriodicWork(RefreshDataWork.WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, repeatingRequest)
     }
 
 }
